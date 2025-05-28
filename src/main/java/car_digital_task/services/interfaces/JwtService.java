@@ -1,4 +1,4 @@
-package car_digital_task.services;
+package car_digital_task.services.interfaces;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;

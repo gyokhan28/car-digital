@@ -1,4 +1,4 @@
-package car_digital_task.services;
+package car_digital_task.services.impl;
 
 import car_digital_task.models.User;
 import org.springframework.security.core.GrantedAuthority;

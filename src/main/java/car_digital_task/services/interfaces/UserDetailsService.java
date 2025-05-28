@@ -1,4 +1,4 @@
-package car_digital_task.services;
+package car_digital_task.services.interfaces;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,4 +1,4 @@
-package car_digital_task.services;
+package car_digital_task.services.impl;
 
 import car_digital_task.dto.UserCreateRequest;
 import car_digital_task.dto.UserResponse;
@@ -7,6 +7,7 @@ import car_digital_task.exceptions.NotFoundException;
 import car_digital_task.mapper.UserMapper;
 import car_digital_task.models.User;
 import car_digital_task.repositories.UserRepository;
+import car_digital_task.services.interfaces.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

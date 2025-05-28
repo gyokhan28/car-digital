@@ -1,4 +1,4 @@
-package car_digital_task.services;
+package car_digital_task.services.interfaces;
 
 import car_digital_task.dto.UserCreateRequest;
 import car_digital_task.dto.UserResponse;

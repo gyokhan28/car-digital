@@ -1,5 +1,6 @@
-package car_digital_task.services;
+package car_digital_task.services.impl;
 
+import car_digital_task.services.interfaces.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
