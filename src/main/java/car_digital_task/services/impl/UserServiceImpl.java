@@ -1,9 +1,13 @@
 package car_digital_task.services.impl;
 
+import car_digital_task.config.SecurityConfig;
+import car_digital_task.dto.PasswordChangeRequest;
 import car_digital_task.dto.UserCreateRequest;
 import car_digital_task.dto.UserEditRequest;
 import car_digital_task.dto.UserResponse;
 import car_digital_task.exceptions.AlreadyExistsException;
+import car_digital_task.exceptions.AuthenticationFailedException;
+import car_digital_task.exceptions.InvalidRequestException;
 import car_digital_task.exceptions.NotFoundException;
 import car_digital_task.mapper.UserMapper;
 import car_digital_task.models.User;
@@ -15,11 +19,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.beans.PropertyDescriptor;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -67,6 +73,30 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(editRequest, user, getNullPropertyNames(editRequest));
 
         return UserMapper.toResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void changePassword(PasswordChangeRequest request, Authentication authentication) {
+        User user = getCurrentUserOrThrow(authentication);
+        if(!Objects.equals(request.password(), request.repeatPassword())){
+            throw new InvalidRequestException("Password and repeated password do not match!");
+        }
+        user.setPassword(SecurityConfig.passwordEncoder().encode(request.password()));
+        userRepository.save(user);
+    }
+
+    private User getCurrentUserOrThrow(Authentication authentication) {
+        if (authentication == null) {
+            throw new AuthenticationFailedException("User not authenticated");
+        }
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String email = userDetails.getUser().getUsername();
+        return getUserByUsernameOrThrow(email);
+    }
+
+    private User getUserByUsernameOrThrow(String username){
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new NotFoundException("User with username: " + username + " not found"));
     }
 
     private String[] getNullPropertyNames(Object source) {

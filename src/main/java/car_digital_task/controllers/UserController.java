@@ -1,5 +1,6 @@
 package car_digital_task.controllers;
 
+import car_digital_task.dto.PasswordChangeRequest;
 import car_digital_task.dto.UserCreateRequest;
 import car_digital_task.dto.UserEditRequest;
 import car_digital_task.dto.UserResponse;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,5 +52,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserResponse> edit(@PathVariable("id") Long id, @RequestBody UserEditRequest editRequest) {
         return ResponseEntity.ok(userService.updateUser(id, editRequest));
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest, Authentication authentication){
+        userService.changePassword(passwordChangeRequest, authentication);
     }
 }
