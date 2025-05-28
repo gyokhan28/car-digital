@@ -1,7 +1,7 @@
 package car_digital_task.config;
 
-import car_digital_task.services.JwtService;
-import car_digital_task.services.UserDetailsServiceImpl;
+import car_digital_task.services.interfaces.JwtService;
+import car_digital_task.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

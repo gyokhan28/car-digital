@@ -1,6 +1,5 @@
 package car_digital_task.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -26,11 +25,9 @@ public record UserCreateRequest(
 
         @Email
         @NotEmpty(message = "Email cannot be empty")
-        @Column(unique = true)
         String email,
 
         @NotEmpty(message = "Phone number cannot be empty")
-        @Column(unique = true)
         String phoneNumber,
 
         @NotNull
