@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public record UserCreateRequest(
         @NotNull
         @Size(min = 3, max = 40)
-        String userName,
+        String username,
 
         @NotNull @Size(min = 3)
         String password,

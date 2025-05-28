@@ -7,7 +7,7 @@ import car_digital_task.models.User;
 public class UserMapper {
     public static User toEntity(UserCreateRequest request) {
         return User.builder()
-                .username(request.userName())
+                .username(request.username())
                 .password(request.password())
                 .firstName(request.firstName())
                 .lastName(request.lastName())
