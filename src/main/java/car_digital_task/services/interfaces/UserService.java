@@ -18,6 +18,8 @@ public interface UserService {
 
     UserResponse updateUser(UserEditRequest editRequest, Authentication authentication);
 
+    UserResponse updateUserById(Long id, UserEditRequest editRequest, Authentication authentication);
+
     void changePassword(PasswordChangeRequest request, Authentication authentication);
 
     void deleteUser(Long id);

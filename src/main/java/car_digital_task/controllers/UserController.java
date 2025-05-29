@@ -58,6 +58,13 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(editRequest, authentication));
     }
 
+    //FOR ADMINS - Change any user's fields
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserResponse> editUserById(@PathVariable("id") Long id, @RequestBody UserEditRequest editRequest, Authentication authentication) {
+        return ResponseEntity.ok(userService.updateUserById(id, editRequest, authentication));
+    }
+
     @PutMapping("/change-password")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest, Authentication authentication) {

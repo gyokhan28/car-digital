@@ -76,6 +76,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public UserResponse updateUserById(Long id, UserEditRequest editRequest, Authentication authentication) {
+        User user = getUserOrThrow(id);
+        updateChanges(user, editRequest);
+        return UserMapper.toResponse(userRepository.save(user));
+    }
+
+    @Override
+    @Transactional
     public void changePassword(PasswordChangeRequest request, Authentication authentication) {
         User user = getCurrentUserOrThrow(authentication);
         if (!Objects.equals(request.password(), request.repeatPassword())) {
