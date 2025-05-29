@@ -16,9 +16,18 @@ Follow the steps below to set up and run the project:
 
 
 
-2. **Add the .env File into the Deploy directory.**
+2. **Configure Environment Variables**
 
-   Make sure the .env file is in the Deploy directory.
+> **Important:** The `.env` file is **not included** and will **not be provided**.  
+> Please create your own `.env` file in the `deploy/` directory **or** set the required environment variables manually in your system or IDE.
+>
+> Example values you need to provide:
+> ```
+> DB_PASSWORD=password
+> DB_TABLE_NAME=car-digital-db
+> DB_USERNAME=postgres
+> JWT_SECRET_KEY=your-jwt-key
+> ```
 
 
 
