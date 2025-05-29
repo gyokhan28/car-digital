@@ -159,8 +159,8 @@ Changes password of the currently authenticated user.
 #### Request Body:
 ```json
 {
-  "oldPassword": "string",
-  "newPassword": "string"
+  "password": "string",
+  "repeatPassword": "string"
 }
 ```
 
