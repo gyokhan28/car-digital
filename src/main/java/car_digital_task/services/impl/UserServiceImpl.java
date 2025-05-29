@@ -19,6 +19,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -54,14 +58,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getUsers(String search) {
+    public List<UserResponse> getUsers(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("lastName").ascending().and(Sort.by("birthDate").ascending()));
+        Page<User> userPage;
+
         List<User> userList;
         if (search == null || search.isBlank()) {
-            userList = userRepository.findAllSorted();
+            userPage = userRepository.findAllSorted(pageable);
         } else {
-            userList = userRepository.findAllBySearch(search);
+            userPage = userRepository.findAllBySearch(search, pageable);
         }
-        return userList.stream().map(UserMapper::toResponse).toList();
+        return userPage.map(UserMapper::toResponse).toList();
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface UserService {
 
     UserResponse getById(Long id);
 
-    List<UserResponse> getUsers(String search);
+    List<UserResponse> getUsers(String search, int page, int size);
 
     UserResponse updateUser(Long id, UserEditRequest editRequest);
 

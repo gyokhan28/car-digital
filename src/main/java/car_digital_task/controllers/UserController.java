@@ -45,8 +45,11 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(required = false) String search) {
-        return ResponseEntity.ok(userService.getUsers(search));
+    public ResponseEntity<List<UserResponse>> getUsers(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(userService.getUsers(search, page, size));
     }
 
     @PatchMapping("/{id}")
