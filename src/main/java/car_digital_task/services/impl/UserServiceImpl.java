@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponse updateUser(Long id, UserEditRequest editRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void changePassword(PasswordChangeRequest request, Authentication authentication) {
         User user = getCurrentUserOrThrow(authentication);
         if(!Objects.equals(request.password(), request.repeatPassword())){
@@ -83,6 +85,14 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(SecurityConfig.passwordEncoder().encode(request.password()));
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+        userRepository.delete(user);
     }
 
     private User getCurrentUserOrThrow(Authentication authentication) {
