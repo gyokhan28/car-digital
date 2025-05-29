@@ -1,0 +1,2 @@
+INSERT INTO users (username, email, first_name, last_name, birth_date, phone_number, password, is_enabled)
+VALUES ('admin', 'admin@admin.admin', 'admin', 'admin', '1980-01-01', '+359888123456', '$2a$10$aJP2F0BxtvW8xJF1w/6pKOpq9zL9pQYMa7iewIIHCVmtQRIH.WsPq', true);

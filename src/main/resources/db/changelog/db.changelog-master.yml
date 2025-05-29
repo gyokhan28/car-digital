@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file: 02-create-roles-table.sql
       relativeToChangelogFile: true
+  - include:
+      file: 03-add-admin-user.sql
+      relativeToChangelogFile: true
