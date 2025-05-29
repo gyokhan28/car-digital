@@ -49,8 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with ID " + id + " not found!"));
+        User user = getUserOrThrow(id);
         return UserMapper.toResponse(user);
     }
 
@@ -68,8 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse updateUser(Long id, UserEditRequest editRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+        User user = getUserOrThrow(id);
 
         BeanUtils.copyProperties(editRequest, user, getNullPropertyNames(editRequest));
 
@@ -90,9 +88,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
+        User user = getUserOrThrow(id);
         userRepository.delete(user);
+    }
+
+    private User getUserOrThrow(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
     }
 
     private User getCurrentUserOrThrow(Authentication authentication) {
@@ -100,8 +102,8 @@ public class UserServiceImpl implements UserService {
             throw new AuthenticationFailedException("User not authenticated");
         }
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String email = userDetails.getUser().getUsername();
-        return getUserByUsernameOrThrow(email);
+        String username = userDetails.getUser().getUsername();
+        return getUserByUsernameOrThrow(username);
     }
 
     private User getUserByUsernameOrThrow(String username){
