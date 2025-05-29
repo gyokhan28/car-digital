@@ -112,7 +112,7 @@ Retrieves a paginated list of users. Optional search by username or other criter
 - `page` (optional, default 0): page number
 - `size` (optional, default 10): page size
 
-### Response:
+#### Response:
 
 - `200 OK` with JSON array of users.
 ---
@@ -121,7 +121,7 @@ Retrieves a paginated list of users. Optional search by username or other criter
 #### Description:
 Retrieves a user by their ID.
 
-### Response:
+#### Response:
 
 - `200 OK` with JSON representation of the user.
 - `404 Not Found` if user does not exist.
@@ -134,7 +134,7 @@ Updates fields of the currently authenticated user. Accepts partial updates.
 #### Request Body:
 - Partial JSON object containing any subset of user fields (e.g. `firstName`, `lastName`, `phoneNumber`, `email`, `birthDate`).
 
-### Response:
+#### Response:
 
 - `200 OK` with updated user data
 ---
@@ -146,7 +146,7 @@ Updates fields of the currently authenticated user. Accepts partial updates.
 #### Request Body:
 - Partial JSON object containing any subset of user fields (e.g. `firstName`, `lastName`, `phoneNumber`, `email`, `birthDate`).
 
-### Response:
+#### Response:
 
 - `200 OK` with updated user data
 - `403 Forbidden` if current user is not an admin.
@@ -164,7 +164,7 @@ Changes password of the currently authenticated user.
 }
 ```
 
-### Response:
+#### Response:
 
 - `204 No Content` on success.
 - `400 Bad Request` if the new passwords do not match..
@@ -174,7 +174,7 @@ Changes password of the currently authenticated user.
 #### Description:
 (Admin only) Deletes a user by ID.
 
-### Response:
+#### Response:
 
 - `204 No Content` on success.
 - `403 Forbidden` if current user is not an admin.
