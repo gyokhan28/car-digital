@@ -15,9 +15,6 @@ import car_digital_task.repositories.UserRepository;
 import car_digital_task.services.interfaces.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +23,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.beans.PropertyDescriptor;
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -73,11 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateUser(Long id, UserEditRequest editRequest) {
-        User user = getUserOrThrow(id);
-
-        BeanUtils.copyProperties(editRequest, user, getNullPropertyNames(editRequest));
-
+    public UserResponse updateUser(UserEditRequest editRequest, Authentication authentication) {
+        User user = getCurrentUserOrThrow(authentication);
+        updateChanges(user, editRequest);
         return UserMapper.toResponse(userRepository.save(user));
     }
 
@@ -85,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changePassword(PasswordChangeRequest request, Authentication authentication) {
         User user = getCurrentUserOrThrow(authentication);
-        if(!Objects.equals(request.password(), request.repeatPassword())){
+        if (!Objects.equals(request.password(), request.repeatPassword())) {
             throw new InvalidRequestException("Password and repeated password do not match!");
         }
         user.setPassword(SecurityConfig.passwordEncoder().encode(request.password()));
@@ -99,7 +92,22 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    private User getUserOrThrow(Long id){
+    private void updateChanges(User user, UserEditRequest request) {
+        updateFirstName(user, request.firstName());
+        updateLastName(user, request.lastName());
+        updateBirthDate(user, request.dateOfBirth());
+        updatePhoneNumber(user, request.phoneNumber());
+        updateEmail(user, request.email());
+    }
+
+    private boolean doesEmailExist(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new AlreadyExistsException("This email is already registered!");
+        }
+        return false;
+    }
+
+    private User getUserOrThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
     }
@@ -113,23 +121,9 @@ public class UserServiceImpl implements UserService {
         return getUserByUsernameOrThrow(username);
     }
 
-    private User getUserByUsernameOrThrow(String username){
+    private User getUserByUsernameOrThrow(String username) {
         return userRepository.findByUsername(username).orElseThrow(() ->
                 new NotFoundException("User with username: " + username + " not found"));
-    }
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
     }
 
     private void validateUniqueFields(UserCreateRequest request) {
@@ -141,4 +135,39 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    private void updateFirstName(User user, String firstName) {
+        if (firstName != null) {
+            user.setFirstName(firstName);
+        }
+    }
+
+    private void updateLastName(User user, String lastName) {
+        if (lastName != null) {
+            user.setLastName(lastName);
+        }
+    }
+
+    private void updateBirthDate(User user, LocalDate birthDate) {
+        if (birthDate != null) {
+            user.setBirthDate(birthDate);
+        }
+    }
+
+    private void updatePhoneNumber(User user, String phoneNumber) {
+        if (phoneNumber != null && !phoneNumber.equals(user.getPhoneNumber())) {
+            if (userRepository.existsByPhoneNumber(phoneNumber)) {
+                throw new AlreadyExistsException("This phone number is already registered");
+            }
+            user.setPhoneNumber(phoneNumber);
+        }
+    }
+
+    private void updateEmail(User user, String email) {
+        if (email != null && !email.equals(user.getEmail())) {
+            if (doesEmailExist(email)) {
+                throw new AlreadyExistsException("This email is already registered");
+            }
+            user.setEmail(email);
+        }
+    }
 }

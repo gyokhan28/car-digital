@@ -52,10 +52,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers(search, page, size));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserResponse> edit(@PathVariable("id") Long id, @RequestBody UserEditRequest editRequest) {
-        return ResponseEntity.ok(userService.updateUser(id, editRequest));
+    public ResponseEntity<UserResponse> edit(@RequestBody UserEditRequest editRequest, Authentication authentication) {
+        return ResponseEntity.ok(userService.updateUser(editRequest, authentication));
     }
 
     @PutMapping("/change-password")

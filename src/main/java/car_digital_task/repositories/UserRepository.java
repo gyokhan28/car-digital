@@ -20,11 +20,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllSorted(Pageable pageable);
 
     @Query("""
-    SELECT u FROM User u 
-    WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :search, '%')) 
-       OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%'))
-    ORDER BY u.lastName ASC, u.birthDate ASC
-""")
+                SELECT u FROM User u 
+                WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :search, '%')) 
+                   OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%'))
+                ORDER BY u.lastName ASC, u.birthDate ASC
+            """)
     Page<User> findAllBySearch(@Param("search") String search, Pageable pageable);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByPhoneNumber(String phoneNumber);
 }

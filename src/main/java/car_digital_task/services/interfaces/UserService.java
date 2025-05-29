@@ -16,7 +16,7 @@ public interface UserService {
 
     List<UserResponse> getUsers(String search, int page, int size);
 
-    UserResponse updateUser(Long id, UserEditRequest editRequest);
+    UserResponse updateUser(UserEditRequest editRequest, Authentication authentication);
 
     void changePassword(PasswordChangeRequest request, Authentication authentication);
 
