@@ -46,6 +46,12 @@ Follow the steps below to set up and run the project:
 
    After starting the application, open 👉 [http://localhost:8085/](http://localhost:8085/)
 
+## Admin Credentials
+
+> The application includes a predefined admin user that has access to administrative endpoints such as updating or deleting users by ID.
+
+#### Username: `admin`
+#### Password: `cardigitaladmin`
 
 # API Documentation
 
